@@ -1,0 +1,32 @@
+{
+  "name": "yymou/easyjwt",
+  "description": "JSON Web Token implementation for PHP.",
+  "license": "MIT",
+  "keywords": [
+    "JWT",
+    "JSON",
+    "Token"
+  ],
+  "authors": [
+    {
+      "name": "yangyanlei",
+      "email": "875167485@qq.com"
+    }
+  ],
+  "require": {
+    "nowakowskir/php-jwt": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "EasyJwt\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.5|^8.0"
+  }
+}
