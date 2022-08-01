@@ -52,6 +52,15 @@ class Jwt
         $this->key = $key ?? '';
     }
 
+    //获取key
+    private function getKey() : void
+    {
+        if (empty($this->key)) {
+            //生成key
+            $this->key = (new EncryptionKey($this->algorithm))->get();
+        }
+    }
+
     /**
      * 设置支持的算法
      * @param string $algorithm
@@ -79,10 +88,7 @@ class Jwt
         }
         $this->setPayload($info);
         //如果不存在秘钥的话 则生成相关的秘钥
-        if (empty($this->key)) {
-            //生成key
-            $this->key = (new EncryptionKey($this->algorithm))->get();
-        }
+        $this->getKey();
         $this->generateToken();
         return $this->token;
     }
@@ -107,7 +113,13 @@ class Jwt
     public function verifyToken(string $token) : array
     {
         $tokenEncoded = new TokenEncoded($token);
-        //$tokenEncoded->validate(file_get_contents(File::SECRET_DIR . "/" . File::OPENSSL_PUBLIC_KEY), $this->algorithm);
+        $this->getKey();
+        //验证是否安全
+        try {
+            $tokenEncoded->validate($this->key, $this->algorithm);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
         $header = $tokenEncoded->decode()->getPayload();
         return $header;
     }

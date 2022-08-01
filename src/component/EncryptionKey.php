@@ -43,7 +43,13 @@ class EncryptionKey
         $key = '';
         switch ($this->func) {
             case 'hash_hmac' :
-
+                self::$key = uniqid(rand());
+                if (file_exists(FILE::SECRET_DIR . "/" . FILE::HMAC_KEY)) {
+                    self::$key =  file_exists(FILE::SECRET_DIR . "/" . FILE::HMAC_KEY);
+                } else {
+                    self::$key = uniqid(rand());
+                    File::writeFile(FILE::SECRET_DIR, FILE::HMAC_KEY, self::$key);
+                }
                 break;
             case 'openssl' :
                 //查看是否开启openssl模块

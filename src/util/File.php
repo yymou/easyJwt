@@ -13,6 +13,7 @@ class File
     const SECRET_DIR = EASYJWT_ROOT . "/secret";
     const OPENSSL_PRIVATE_KEY = "openssl-private.key";
     const OPENSSL_PUBLIC_KEY = "openssl-public.key";
+    const HMAC_KEY = 'hmac.key';
     /**
      * 写入内容到文件
      * @param string $file
