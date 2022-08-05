@@ -8,8 +8,7 @@ class JwtTest extends TestCase
 {
     public function testGetToken() : string
     {
-        $info = ['a' => 'b'];
-        $token = (new Jwt())->getToken($info);
+        $token = (new Jwt())->setPayload(['a' => 'b'])->setExp(2)->getToken();
         $this->assertNotEmpty($token);
         return $token;
     }
@@ -20,7 +19,7 @@ class JwtTest extends TestCase
      */
     public function testVerifyToken(string $token) : void
     {
-        $this->assertArrayHasKey(['a' => 'b'], (new Jwt())->verifyToken($token));
+        $this->assertArrayHasKey('a', (new Jwt())->explainToken($token)->getPayload());
     }
 
 
