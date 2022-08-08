@@ -14,6 +14,7 @@
     }
   ],
   "require": {
+    "php": "^7.2",
     "nowakowskir/php-jwt": "^2.0"
   },
   "autoload": {
