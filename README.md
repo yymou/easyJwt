@@ -1,6 +1,6 @@
 ## EasyJwt
 
-####如果你想要快速上手并将jwt运用到项目中,就来试试EasyJwt吧!
+##如果你想要快速上手并将jwt运用到项目中,就来试试EasyJwt吧!
 >它尽可能的简化使用jwt的一些前期工作,composer拉过来两三行代码即用, 你甚至不用去管理秘钥...
 
 此处阅读jwt的相关信息:
@@ -88,3 +88,91 @@ require 'vendor/autoload.php';
       + getPayload() -- 获取payload实体
       + getKey() -- 获取当前加密秘钥
       + getHeader() -- 获取header
+
+## 实例代码 (仅供参考)
+```php
+<?php
+
+namespace App\Business\Service;
+
+use EasyJwt\Jwt;
+
+/**
+ * 通行相关逻辑
+ * @author yangyanlei
+ * @email 875167485@qq.com
+ * @date 2022/8/14
+ */
+class AccessService extends BaseService
+{
+    public $errorMsg = '';
+
+    private $jwtModel;
+
+    const JWT_EXPIRE_TIME = 86400 * 15;
+
+    function __construct()
+    {
+        parent::__construct();
+        $this->jwtModel = new Jwt();
+    }
+
+    /**
+     * 验证bearer token
+     * @return bool|array
+     */
+    public function verifyBearerToken()
+    {
+        $token = $this->getBearerToken();
+        if (empty($token)) {
+            return false;
+        }
+
+        return $this->jwtModel->explainToken($token)->getPayload();
+    }
+
+    /**
+     * Get header Authorization
+     * */
+    public function getAuthorizationHeader()
+    {
+        $headers = null;
+
+        if (isset($_SERVER['Authorization'])) {
+            $headers = trim($_SERVER["Authorization"]);
+        } else if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
+        } elseif (function_exists('apache_request_headers')) {
+            $requestHeaders = apache_request_headers();
+            $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
+            if (isset($requestHeaders['Authorization'])) {
+                $headers = trim($requestHeaders['Authorization']);
+            }
+        }
+        return $headers;
+    }
+
+    /**
+     * get access token from header
+     * */
+    public function getBearerToken() {
+        $headers = $this->getAuthorizationHeader();
+        if (!empty($headers)) {
+            if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+                return $matches[1];
+            }
+        }
+        return null;
+    }
+
+    //刷新token
+    public function refreshToken(array $payload) : string
+    {
+        if (!empty($payload)) {
+            return $this->jwtModel->setExp(self::JWT_EXPIRE_TIME)->setPayload($payload)->getToken();
+        }
+        return '';
+    }
+}
+
+```
