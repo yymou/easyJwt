@@ -39,7 +39,7 @@ require 'vendor/autoload.php';
 ### 如果你想个性化一下参数的话 可以往下看...
 > 以下 EasyJwt\Jwt() 均写为 $jwtObj;
 
-1. 你可以ni定义加密的算法
+1. 你可以定义加密的算法
    1. 支持的算法如下:
         * HS256
         * HS384
@@ -89,7 +89,7 @@ require 'vendor/autoload.php';
       + getKey() -- 获取当前加密秘钥
       + getHeader() -- 获取header
 
-## 实例代码 (仅供参考)
+## 实例代码 (仅供参考) php 7.2+
 ```php
 <?php
 
@@ -99,9 +99,6 @@ use EasyJwt\Jwt;
 
 /**
  * 通行相关逻辑
- * @author yangyanlei
- * @email 875167485@qq.com
- * @date 2022/8/14
  */
 class AccessService extends BaseService
 {
