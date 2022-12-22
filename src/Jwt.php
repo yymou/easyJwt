@@ -112,11 +112,13 @@ class Jwt
     //获取key
     private function getKey() : void
     {
-        $encryptionObj = Encryption::getInstance($this->algorithm);
-        if ($encryptionObj->getAlgorithmType() == $encryptionObj::OPENSSL) {
-            $this->key = $encryptionObj->getPrivateKey();
-        } else {
-            $this->key = $encryptionObj->getHmacKey();
+        if (empty($this->key)) {
+            $encryptionObj = Encryption::getInstance($this->algorithm);
+            if ($encryptionObj->getAlgorithmType() == $encryptionObj::OPENSSL) {
+                $this->key = $encryptionObj->getPrivateKey();
+            } else {
+                $this->key = $encryptionObj->getHmacKey();
+            }
         }
     }
 
